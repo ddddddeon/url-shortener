@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Short.Services
@@ -19,15 +18,14 @@ namespace Short.Services
 
         private string GenerateShortUrl(string longUrl)
         {
-            MD5 hash = MD5.Create();
-
-            byte[] longUrlBytes = Encoding.ASCII.GetBytes(longUrl);
-            byte[] hashBytes = hash.ComputeHash(longUrlBytes);
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            int maxSize = 7;
+            var random = new Random();
 
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i <= 3; i++)
+            for (int i = 0; i <= maxSize; i++)
             {
-                sb.Append(hashBytes[i].ToString("X"));
+                sb.Append(chars[random.Next(0, chars.Length)]);
             }
 
             return sb.ToString();
