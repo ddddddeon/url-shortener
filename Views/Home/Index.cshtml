@@ -1,0 +1,42 @@
+<script>
+    // TODO validate lol
+    async function shortenUrl() {
+        var shortenElem = document.getElementById("shorten")
+        var urlInput = document.getElementById("url");
+        var resultElem = document.getElementById("result");
+        var copyButtonElem = document.getElementById("copy-button")
+
+        copyButtonElem.onclick = () => {
+            resultElem.focus();
+            resultElem.select();
+            console.log(resultElem);
+            document.execCommand("copy");
+        }
+
+        var xhr = new XMLHttpRequest();
+
+        // TODO validate input lol
+        xhr.open("GET", "/shorten?url=" + urlInput.value);
+        xhr.responseType = "json";
+
+        xhr.onload = () => {
+            resultElem.value = xhr.response.url;
+            resultElem.hidden = false;
+            copyButtonElem.innerText = "Copy to Clipboard"
+            copyButtonElem.hidden = false;
+        };
+
+        xhr.send();
+    }
+</script>
+
+<div id="shorten">
+    <h1>Hi</h1>
+    <form action="/shorten" method="get">
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url"><br><br>
+    </form>
+    <button onclick="shortenUrl()">Shorten</button><br><br>
+    <textarea hidden id="result" style="height: 30px; width: 287px;"></textarea> <br><br>
+    <button id="copy-button" hidden></button>
+</div>

@@ -10,7 +10,7 @@ public class UrlController : ControllerBase
         _urlService = urlService;
     }
 
-    [HttpGet("api/shorten")]
+    [HttpGet("shorten")]
     public async Task<IActionResult> GetShortUrl(string url)
     {
         string shortenedUrl = await _urlService.ShortenUrl(HttpContext.Request, url);
@@ -34,4 +34,5 @@ public class UrlController : ControllerBase
             });
         }
     }
+
 }
