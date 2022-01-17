@@ -1,36 +1,73 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        #title-header {
+            color: white;
+            margin-top: 10px
+        }
+
+        #url {
+            width: 50%;
+        }
+
+        #result {
+            height: 40px;
+            width: 287px;
+            resize: none;
+            display: inline;
+            float: left;
+        }
+
+        #copy-button {
+            display: inline;
+            float: left;
+        }
+
+        #copied {
+            font-size: 200%;
+            color: green;
+            display: inline;
+        }
+    </style>
+
     <title>URL Shortener</title>
 </head>
 
-<body>
-    @* <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script> *@
+<body style="background: #1e1e1e; !important;">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
     <script>
-        // TODO validate lol
         async function shortenUrl() {
-            var shortenElem = document.getElementById("shorten")
+            var shortenElem = document.getElementById("shorten");
             var urlInput = document.getElementById("url");
             var resultElem = document.getElementById("result");
-            var copyButtonElem = document.getElementById("copy-button")
+            var copyButtonElem = document.getElementById("copy-button");
+            var copiedElem = document.getElementById("copied");
+            var spinnerElem = document.getElementById("loading-spinner");
+
+            resultElem.hidden = true;
+            copiedElem.hidden = true; 7
+            copyButtonElem.hidden = true;
+            spinnerElem.hidden = false;
+            copyButtonElem.classList.remove("bg-success");
+            copyButtonElem.classList.add("bg-primary");
 
             copyButtonElem.onclick = () => {
+                console.log("onclick: " + spinnerElem.hidden);
                 resultElem.focus();
                 resultElem.select();
                 console.log(resultElem);
                 document.execCommand("copy");
+                resultElem.blur();
+
+                copyButtonElem.classList.add("bg-success");
+                copyButtonElem.innerText = "Copied!"
             }
 
             var xhr = new XMLHttpRequest();
@@ -40,9 +77,10 @@
             xhr.responseType = "json";
 
             xhr.onload = () => {
+                spinnerElem.hidden = true;
                 resultElem.value = xhr.response.url;
                 resultElem.hidden = false;
-                copyButtonElem.innerText = "Copy to Clipboard"
+                copyButtonElem.innerText = "Copy to Clipboard";
                 copyButtonElem.hidden = false;
             };
 
@@ -51,13 +89,20 @@
     </script>
 
     <div id="shorten" class="container">
-        <h1>Hi</h1>
-        <form action="/shorten" method="get">
-            <label for="url">URL:</label>
-            <input type="text" id="url" name="url"><br><br>
-        </form>
-        <button class="btn btn-primary" onclick="shortenUrl()">Shorten</button><br><br>
-        <textarea hidden id="result" style="height: 30px; width: 287px;"></textarea> <br><br>
+        <header class="d-flex flex-wrap" id="title-header">
+            <h1>URL Shortener</h1>
+        </header>
+        <br>
+        <input type="text" id="url" name="url" class="form-control" placeholder="Paste long URL here...">
+        <br>
+        <button class="btn btn-primary" onclick="shortenUrl()">Shorten</button>
+        <br><br>
+        <div class="spinner-border text-info" role="status" id="loading-spinner" hidden>
+            <span class="sr-only">Loading...</span>
+        </div>
+        <textarea hidden id="result" class="form-control"></textarea>
         <button id="copy-button" class="btn btn-primary" hidden></button>
+        <div id="copied" hidden>&#10004;</div>
+        <br><br>
     </div>
 </body>
