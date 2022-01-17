@@ -52,12 +52,12 @@ namespace Short.Services
                 _context.Urls.Add(new Models.Url() { LongUrl = url, ShortUrl = shortUrl });
                 await _context.SaveChangesAsync();
 
-                generatedShortUrl = "https://" + request.Host.ToString() + "/" + shortUrl;
+                generatedShortUrl = request.Scheme + "://" + request.Host.ToString() + "/" + shortUrl;
 
                 return generatedShortUrl;
             }
 
-            generatedShortUrl = "https://" + request.Host.ToString() + "/" + existingUrl.ShortUrl;
+            generatedShortUrl = request.Scheme + "://" + request.Host.ToString() + "/" + existingUrl.ShortUrl;
             return generatedShortUrl; ;
         }
 

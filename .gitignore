@@ -3,5 +3,5 @@
 **/bin
 **/obj
 **/Properties
-**/appsettings*
+**/*appsettings*
 **/Migrations/

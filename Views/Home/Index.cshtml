@@ -42,7 +42,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 
-    <script>
+    <script>9
         async function shortenUrl() {
             var shortenElem = document.getElementById("shorten");
             var urlInput = document.getElementById("url");
@@ -58,18 +58,6 @@
             copyButtonElem.classList.remove("bg-success");
             copyButtonElem.classList.add("bg-primary");
 
-            copyButtonElem.onclick = () => {
-                console.log("onclick: " + spinnerElem.hidden);
-                resultElem.focus();
-                resultElem.select();
-                console.log(resultElem);
-                document.execCommand("copy");
-                resultElem.blur();
-
-                copyButtonElem.classList.add("bg-success");
-                copyButtonElem.innerText = "Copied!"
-            }
-
             var xhr = new XMLHttpRequest();
 
             // TODO validate input lol
@@ -83,6 +71,15 @@
                 copyButtonElem.innerText = "Copy to Clipboard";
                 copyButtonElem.hidden = false;
             };
+
+            copyButtonElem.onclick = () => {
+                resultElem.focus();
+                resultElem.select();
+                document.execCommand("copy");
+                resultElem.blur();
+                copyButtonElem.classList.add("bg-success");
+                copyButtonElem.innerText = "Copied!"
+            }
 
             xhr.send();
         }
