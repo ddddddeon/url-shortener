@@ -64,6 +64,11 @@ namespace Short.Services
         public async Task<string> GetLongUrl(string id)
         {
             Url result = await _context.Urls.Where(u => u.ShortUrl == id).FirstOrDefaultAsync();
+            if (result == null)
+            {
+                return null;
+            }
+
             string longUrl = result.LongUrl;
             if (!longUrl.StartsWith("http"))
             {
