@@ -37,6 +37,17 @@ namespace Short.Services
             var existingUrl = await _context.Urls.Where(u => u.LongUrl == url).FirstOrDefaultAsync();
             string shortUrl;
 
+            string scheme;
+            Console.WriteLine(request.Headers["Referer"].ToString());
+            if (request.Headers["Referer"].ToString().Contains("https"))
+            {
+                scheme = request.Scheme + "s://";
+            }
+            else
+            {
+                scheme = request.Scheme + "://";
+            }
+
             if (existingUrl == null)
             {
                 int maxRetries = 10;
@@ -52,12 +63,12 @@ namespace Short.Services
                 _context.Urls.Add(new Models.Url() { LongUrl = url, ShortUrl = shortUrl });
                 await _context.SaveChangesAsync();
 
-                generatedShortUrl = request.Scheme + "://" + request.Host.ToString() + "/" + shortUrl;
+                generatedShortUrl = scheme + request.Host.ToString() + "/" + shortUrl;
 
                 return generatedShortUrl;
             }
 
-            generatedShortUrl = request.Scheme + "://" + request.Host.ToString() + "/" + existingUrl.ShortUrl;
+            generatedShortUrl = scheme + request.Host.ToString() + "/" + existingUrl.ShortUrl;
             return generatedShortUrl; ;
         }
 
